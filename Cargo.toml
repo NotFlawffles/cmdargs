@@ -7,5 +7,6 @@ authors = ["NotFlawffles notflawffles@gmail.com"]
 description = "Minimal, precise library for primarily fetching and sorting runtime command line arguments accordingly."
 license = "MIT"
 repository = "https://github.com/"
+readme = "README.md"
 
 [dependencies]
