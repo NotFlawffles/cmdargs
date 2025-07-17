@@ -1,0 +1,11 @@
+[package]
+name = "cmdargs"
+version = "0.1.0"
+edition = "2024"
+
+authors = ["NotFlawffles notflawffles@gmail.com"]
+description = "Minimal, precise library for primarily fetching and sorting runtime command line arguments accordingly."
+license = "MIT"
+repository = "https://github.com/"
+
+[dependencies]
