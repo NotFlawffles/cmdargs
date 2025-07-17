@@ -1,4 +1,4 @@
-# CMDArgs
+# CommandArgs
 Minimal, precise library for primarily fetching and sorting runtime command line arguments accordingly.
 
 For each command line argument will be rawly read, based on a user-specified command pattern
