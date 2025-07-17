@@ -5,7 +5,7 @@ edition = "2024"
 
 authors = ["NotFlawffles notflawffles@gmail.com"]
 description = "Minimal, precise library for primarily fetching and sorting runtime command line arguments accordingly."
-license = "MIT"
+license = "Apache-2.0"
 repository = "https://github.com/NotFlawffles/commandargs"
 readme = "README.md"
 
