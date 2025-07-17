@@ -1,8 +1,13 @@
 use crate::{
     args::Args,
-    command_pattern::CommandPattern,
-    option::{ArgumentedOptionPatternArgument, Option, OptionPattern, Options},
+    command::command_pattern::CommandPattern,
+    option::{
+        Option, Options,
+        option_pattern::{ArgumentedOptPatArg, OptionPattern},
+    },
 };
+
+pub mod command_pattern;
 
 pub struct Command<'a> {
     pub command_pattern: CommandPattern<'a>,
@@ -11,10 +16,7 @@ pub struct Command<'a> {
 }
 
 impl<'a> Command<'a> {
-    pub fn from_args(
-        args: Args,
-        command_patterns: Vec<CommandPattern<'a>>,
-    ) -> Result<Self, String> {
+    pub fn from_args(args: Args, command_patterns: &[CommandPattern<'a>]) -> Result<Self, String> {
         let args = args.as_vec();
         let mut args = args.iter();
         _ = args.next();
@@ -75,10 +77,10 @@ impl<'a> Command<'a> {
                     OptionPattern::Argumented(name, expected_values) => {
                         if index + 1 < args_left
                             && match expected_values {
-                                ArgumentedOptionPatternArgument::Specific(values) => {
+                                ArgumentedOptPatArg::Specific(values) => {
                                     values.contains(&args.get(index + 1).unwrap().as_str())
                                 }
-                                ArgumentedOptionPatternArgument::Any => true,
+                                ArgumentedOptPatArg::Any => true,
                             }
                         {
                             let arg = args.get(index + 1).unwrap();
