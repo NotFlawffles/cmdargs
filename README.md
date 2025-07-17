@@ -19,11 +19,11 @@ use crate::{
 fn main() {
     let command = Command::from_args(
         Args::CommandLineArgs,
-        vec![
+        &[
             CommandPattern::new(
                 "greet",
                 1,
-                vec![
+                &[
                     OptionPattern::Argumented(
                         "method",
                         ArgumentedOptionPatternArgument::Specific(&["hello", "hi"]),
