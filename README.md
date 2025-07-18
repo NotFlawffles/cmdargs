@@ -9,12 +9,7 @@ it will also be reading options based on user-specified set of option patterns.
 ## Example
 
 ```rust
-use crate::{
-    args::Args,
-    command::Command,
-    command_pattern::CommandPattern,
-    option::{ArgumentedOptionPatternArgument, Option, OptionPattern},
-};
+use crate::{args::Args, command::{command_pattern::CommandPattern, Command}, option::option_pattern::{ArgumentedOptPatArg, OptionPattern}};
 
 fn main() {
     let command = Command::from_args(
@@ -26,30 +21,20 @@ fn main() {
                 &[
                     OptionPattern::Argumented(
                         "method",
-                        ArgumentedOptionPatternArgument::Specific(&["hello", "hi"]),
+                        ArgumentedOptPatArg::Specific(&["hello", "hi"]),
                     ),
-                    OptionPattern::Argumented("also-greet", ArgumentedOptionPatternArgument::Any),
+                    OptionPattern::Argumented("also-greet", ArgumentedOptPatArg::Any),
                 ],
                 &|args, opts| {
                     // implementation of "greet" command
                     let name = args.get(0).unwrap();
-
-                    let method = opts.get("method").map_or("hello", |opt| {
-                        if let Option::Argumented(.., value) = opt {
-                            value
-                        } else {
-                            unreachable!()
-                        }
-                    });
-
-                    let also_greet = opts.get("also-greet");
+                    let method = opts.get_argumented("method").map_or("hello", |method| method);
+                    let also_greet = opts.get_argumented("also-greet");
 
                     println!("{method} {name}!");
 
-                    if let Some(option) = also_greet {
-                        if let Option::Argumented(.., name) = option {
-                            println!("and {method} {name}!");
-                        }
+                    if let Some(name) = also_greet {
+                        println!("and {method} {name}!");
                     }
                 },
             ), /* you can also add more commands with the same logic and try other options */
