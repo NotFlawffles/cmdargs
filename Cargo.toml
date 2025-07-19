@@ -1,6 +1,6 @@
 [package]
 name = "commandargs"
-version = "0.1.4_alpha-1"
+version = "0.1.4-alpha-1"
 edition = "2024"
 
 authors = ["NotFlawffles notflawffles@gmail.com"]
