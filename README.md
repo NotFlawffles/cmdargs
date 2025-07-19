@@ -51,7 +51,7 @@ fn main() {
 }
 ```
 
-Result (the -- is required to prevent furhter options from passing into cargo):
+Result (the -- is required to prevent further options from passing into cargo):
 ```shell
 $ cargo run -- greet NotFlawffles -method hi -also-greet "John Doe"
 hi NotFlawffles!

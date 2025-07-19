@@ -9,6 +9,29 @@ use crate::{
 
 pub mod command_pattern;
 
+/// Command generated from an appropriate defined `CommandPattern`. It stores information of the
+/// result command based on `Args`, therefore `Command` is a result type, and not a container.
+///
+/// ### Fields
+/// - command_patterns: Original `CommandPattern` from which this `Command` was generated. It is
+/// stored in order to call its `callback` field and to determine which command was matched.
+/// - arguments: Arguments generated following `CommandPattern`'s `args_count` field.
+/// - options: Options generated following `CommandPattern`'s `option_patterns` field.
+///
+/// ### Example
+/// ```rust
+/// Command::new(
+///     Args::CommandLineArgs,
+///     &[
+///         CommandPattern::new(
+///             "exit",
+///             &[], // No arguments are accepted.
+///             &[], // No options are accepted.
+///             &|_, _| std::process:exit(0),
+///         ),
+///     ],
+/// )
+/// ```
 pub struct Command<'a> {
     pub command_pattern: CommandPattern<'a>,
     pub arguments: Vec<String>,
@@ -16,6 +39,27 @@ pub struct Command<'a> {
 }
 
 impl<'a> Command<'a> {
+    /// Creates a new `Command` from commandargs's `Args`.
+    ///
+    /// ### Fields
+    /// - args: Source of arguments used, refer to `Args` to know the possible variants that can be
+    /// passed here.
+    /// - command_patterns: Accepted `CommandPattern`'s used to get a result `Command`.
+    ///
+    /// ### Example
+    /// ```rust
+    /// Command::from_args(
+    ///     Args::CommandLineArgs,
+    ///     &[
+    ///         CommandPattern::new(
+    ///             "exit",
+    ///             &[], // No arguments are accepted.
+    ///             &[], // No options are accepted.
+    ///             &|_, _| std::process:exit(0),
+    ///         ),
+    ///     ],
+    /// )
+    /// ```
     pub fn from_args(args: Args, command_patterns: &[CommandPattern<'a>]) -> Result<Self, String> {
         let args = args.as_vec();
         let mut args = args.iter();
@@ -95,10 +139,10 @@ impl<'a> Command<'a> {
 
                 options.push(option);
             } else {
-                if arguments.len() + 1 > command_pattern.value_count {
+                if arguments.len() + 1 > command_pattern.args_count {
                     return Err(format!(
                         "{command} expects {} arguments.",
-                        command_pattern.value_count,
+                        command_pattern.args_count,
                     ));
                 }
 
@@ -108,10 +152,10 @@ impl<'a> Command<'a> {
             index += 1;
         }
 
-        if arguments.len() < command_pattern.value_count {
+        if arguments.len() < command_pattern.args_count {
             return Err(format!(
                 "{command} expects {} arguments.",
-                command_pattern.value_count,
+                command_pattern.args_count,
             ));
         }
 
@@ -122,6 +166,8 @@ impl<'a> Command<'a> {
         })
     }
 
+    /// Execute the result command, by calling the `callback` field of the matched
+    /// `CommandPattern`.
     pub fn execute(&'a self) {
         (self.command_pattern.callback)(&self.arguments, &self.options);
     }

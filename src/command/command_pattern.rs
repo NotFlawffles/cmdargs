@@ -1,9 +1,19 @@
-use crate::option::{Options, option_pattern::OptionPattern};
+use crate::{
+    option::{Options, option_pattern::OptionPattern},
+};
 
+/// Used to declare an accepted command pattern.
+///
+/// ### Fields
+/// - `name`: Name of the command.
+/// - `args_count`: Amount of arguments accepted.
+/// - `option_patterns`: Accepted option patterns for the command.
+/// - `callback`: A callback used when the command is being invoked,
+/// definition: `&|args: &'a [String], opts: &[Options]|`.
 #[derive(Clone)]
 pub struct CommandPattern<'a> {
     pub name: String,
-    pub value_count: usize,
+    pub args_count: usize,
     pub option_patterns: &'static [OptionPattern],
     pub callback: &'a dyn Fn(&'a [String], &Options),
 }
@@ -11,13 +21,13 @@ pub struct CommandPattern<'a> {
 impl<'a> CommandPattern<'a> {
     pub fn new(
         name: &str,
-        value_count: usize,
+        args_count: usize,
         option_patterns: &'static [OptionPattern],
         callback: &'a dyn Fn(&'a [String], &Options),
     ) -> Self {
         Self {
             name: name.to_string(),
-            value_count,
+            args_count,
             option_patterns,
             callback,
         }
